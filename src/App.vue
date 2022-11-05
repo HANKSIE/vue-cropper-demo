@@ -1,28 +1,44 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="d-flex justify-content-center">
+    <cropper-modal-component @crop="crop">
+      <template v-if="src">
+        <img class="avatar" :src="src" />
+      </template>
+      <template v-else>
+        <div
+          class="d-flex justify-content-center align-items-center bg-secondary avatar"
+        >
+          <span class="text-white">點擊上傳圖片</span>
+        </div>
+      </template>
+    </cropper-modal-component>
   </div>
 </template>
-
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
-</script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+.avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
 }
 </style>
+<script>
+import CropperModalComponent from "./components/CropperModalComponent.vue";
+export default {
+  components: {
+    CropperModalComponent,
+  },
+  data() {
+    return {
+      src: null,
+      imageBlob: null,
+    };
+  },
+  methods: {
+    crop(blob) {
+      if (this.imageBlob) URL.revokeObjectURL(this.imageBlob);
+      this.imageBlob = blob;
+      this.src = URL.createObjectURL(this.imageBlob);
+    },
+  },
+};
+</script>
